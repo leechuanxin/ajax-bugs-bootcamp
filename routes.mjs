@@ -14,4 +14,8 @@ export default function bindRoutes(app) {
     console.log('bug :>> ', bug);
     res.send({ bug });
   });
+  app.get('/features', async (req, res) => {
+    const features = await db.Feature.findAll();
+    res.send({ features });
+  });
 }

@@ -1,6 +1,6 @@
 module.exports = {
   development: {
-    username: 'tail',
+    username: 'chuanxin',
     password: null,
     database: 'bugs_development',
     host: '127.0.0.1',

@@ -15,6 +15,14 @@ export default function initBugModel(sequelize, DataTypes) {
     commit: {
       type: DataTypes.STRING,
     },
+    featureId: {
+      type: DataTypes.INTEGER,
+      // This links the categoryId column to the id column in the categories table
+      references: {
+        model: 'features',
+        key: 'id',
+      },
+    },
     // ... [<OTHER_COLUMNS>]
     createdAt: {
       allowNull: false,
