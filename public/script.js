@@ -11,7 +11,6 @@ bugButton.addEventListener('click', (e) => {
   axios.get('/features')
     .then((response) => {
       const { features } = response.data;
-      console.log('features:', features);
       features.forEach((feature) => {
         const id = `feature-${feature.name.toLowerCase().replace(' ', '-')}`;
         const input = document.createElement('input');
@@ -27,27 +26,21 @@ bugButton.addEventListener('click', (e) => {
         radioDiv.appendChild(label);
         radioDiv.appendChild(br);
       });
-      console.log('features response data:', response.data);
     });
-  // <div class="text-right">
-  //   <input type="radio" id="feature1" name="featureId" value="FEATURE 1" />
-  //   <label for="feature1">FEATURE 1</label><br />
-  //   <input type="radio" id="feature2" name="featureId" value="FEATURE 2" />
-  //   <label for="feature2">FEATURE 2</label><br />
-  //   <input type="radio" id="feature3" name="featureId" value="FEATURE 3" />
-  //   <label for="feature3">FEATURE 3</label>
-  // </div>
 });
 
 submitButton.addEventListener('click', (e) => {
-  let inputs = [...document.querySelectorAll('input')];
+  let inputs = [...bugForm.querySelectorAll('input:not([type="radio"])')];
+  const radio = bugForm.querySelector('input[name="feature_id"]:checked').value;
   console.log('inputs :>> ', inputs);
   inputs = inputs.map((input) => input.value);
   console.log('inputs :>> ', inputs);
+  console.log('radio id:', radio);
   const dataToSend = {
     problem: inputs[0],
     errorText: inputs[1],
     commit: inputs[2],
+    featureId: radio,
   };
   axios
     .post('/', dataToSend)
