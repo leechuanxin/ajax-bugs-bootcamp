@@ -3,6 +3,26 @@ console.log('Script loaded');
 const bugButton = document.querySelector('#bugButton');
 const bugForm = document.querySelector('#bugForm');
 const submitButton = document.querySelector('#submit');
+const listOfBugs = document.querySelector('#listOfBugs');
+
+if (listOfBugs) {
+  listOfBugs.innerHTML = '';
+  axios.get('/bugs')
+    .then((response) => {
+      const { bugs } = response.data;
+      console.log('bugs:', bugs);
+      if (bugs.length > 0) {
+        const ol = document.createElement('ol');
+        bugs.forEach((bug) => {
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>Problem</strong>: ${bug.problem}, <strong>Error Text</strong>: ${bug.errorText}, <strong>Commit ID</strong>: ${bug.commit}, <strong>Feature</strong>: ${bug.feature.name}`;
+          ol.appendChild(li);
+        });
+        listOfBugs.appendChild(ol);
+      }
+    })
+    .catch((err) => console.log('err :>> ', err));
+}
 
 bugButton.addEventListener('click', (e) => {
   bugForm.classList.toggle('hidden');
@@ -26,16 +46,14 @@ bugButton.addEventListener('click', (e) => {
         radioDiv.appendChild(label);
         radioDiv.appendChild(br);
       });
-    });
+    })
+    .catch((err) => console.log('err :>> ', err));
 });
 
 submitButton.addEventListener('click', (e) => {
   let inputs = [...bugForm.querySelectorAll('input:not([type="radio"])')];
   const radio = bugForm.querySelector('input[name="feature_id"]:checked').value;
-  console.log('inputs :>> ', inputs);
   inputs = inputs.map((input) => input.value);
-  console.log('inputs :>> ', inputs);
-  console.log('radio id:', radio);
   const dataToSend = {
     problem: inputs[0],
     errorText: inputs[1],

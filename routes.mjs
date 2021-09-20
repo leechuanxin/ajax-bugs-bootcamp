@@ -18,4 +18,12 @@ export default function bindRoutes(app) {
     const features = await db.Feature.findAll();
     res.send({ features });
   });
+  app.get('/bugs', async (req, res) => {
+    const bugs = await db.Bug.findAll({
+      include: {
+        model: db.Feature,
+      },
+    });
+    res.send({ bugs });
+  });
 }
