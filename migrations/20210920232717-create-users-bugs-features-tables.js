@@ -1,5 +1,30 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('users', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      email: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      password: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+    });
+
     await queryInterface.createTable('features', {
       id: {
         allowNull: false,
@@ -48,6 +73,14 @@ module.exports = {
           key: 'id',
         },
       },
+      user_id: {
+        type: Sequelize.INTEGER,
+        // This links the category_id column to the id column in the categories table
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -59,8 +92,9 @@ module.exports = {
     });
   },
   down: async (queryInterface) => {
-    // Bugs table needs to be dropped first because Bugs references Features
+    // Bugs table needs to be dropped first because Bugs references Features and Users
     await queryInterface.dropTable('bugs');
     await queryInterface.dropTable('features');
+    await queryInterface.dropTable('users');
   },
 };

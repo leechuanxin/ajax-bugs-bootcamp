@@ -20,9 +20,12 @@ export default function bindRoutes(app) {
   });
   app.get('/bugs', async (req, res) => {
     const bugs = await db.Bug.findAll({
-      include: {
+      include: [{
         model: db.Feature,
-      },
+      }, {
+        model: db.User,
+        attributes: ['id', 'email'],
+      }],
     });
     res.send({ bugs });
   });

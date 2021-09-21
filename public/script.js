@@ -4,24 +4,29 @@ const bugButton = document.querySelector('#bugButton');
 const bugForm = document.querySelector('#bugForm');
 const submitButton = document.querySelector('#submit');
 const listOfBugs = document.querySelector('#listOfBugs');
-
-if (listOfBugs) {
+const retrieveListOfBugs = () => {
   listOfBugs.innerHTML = '';
+  console.log('retrieve list of bugs');
   axios.get('/bugs')
     .then((response) => {
+      console.log('response.data:', response.data);
       const { bugs } = response.data;
       console.log('bugs:', bugs);
       if (bugs.length > 0) {
         const ol = document.createElement('ol');
         bugs.forEach((bug) => {
           const li = document.createElement('li');
-          li.innerHTML = `<strong>Problem</strong>: ${bug.problem}, <strong>Error Text</strong>: ${bug.errorText}, <strong>Commit ID</strong>: ${bug.commit}, <strong>Feature</strong>: ${bug.feature.name}`;
+          li.innerHTML = `<strong>Problem</strong>: ${bug.problem}, <strong>Error Text</strong>: ${bug.errorText}, <strong>Commit ID</strong>: ${bug.commit}, <strong>Feature</strong>: ${bug.feature.name}, <strong>Submitted User Email</strong>: ${bug.user.email}`;
           ol.appendChild(li);
         });
         listOfBugs.appendChild(ol);
       }
     })
     .catch((err) => console.log('err :>> ', err));
+};
+
+if (listOfBugs) {
+  retrieveListOfBugs();
 }
 
 bugButton.addEventListener('click', (e) => {
@@ -65,6 +70,9 @@ submitButton.addEventListener('click', (e) => {
     .then((response) => {
       console.log('response.data :>> ', response.data);
     })
-    .then(bugForm.classList.toggle('hidden'))
+    .then(() => {
+      bugForm.classList.toggle('hidden');
+      retrieveListOfBugs();
+    })
     .catch((err) => console.log('err :>> ', err));
 });

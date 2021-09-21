@@ -1,5 +1,5 @@
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface) => {
     /**
      * Add seed commands here.
      *
@@ -32,16 +32,57 @@ module.exports = {
       },
     ];
 
-    queryInterface.bulkInsert('features', features);
+    const users = [
+      {
+        email: 'chuanxin.lee@gmail.com',
+        password: 'chuanxin123',
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+    ];
+
+    // Bulk insert categories
+    const [navbarFeature] = await queryInterface.bulkInsert('features',
+      features, {
+        returning: true,
+      });
+
+    const [chuanxin] = await queryInterface.bulkInsert(
+      'users',
+      users,
+      { returning: true },
+    );
+
+    const bugs = [
+      {
+        problem: 'The navbar does not appear at all.',
+        error_text: 'Uncaught Exception!',
+        commit: 'a6b316fe123',
+        feature_id: navbarFeature.id,
+        user_id: chuanxin.id,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+    ];
+
+    // Bulk insert cart items
+    await queryInterface.bulkInsert('bugs', bugs);
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     /**
      * Add commands to revert seed here.
      *
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('features', null);
+    // Delete rows from tables with foreign key references first
+    await Promise.all([
+      queryInterface.bulkDelete('bugs', null, {}),
+    ]);
+    await Promise.all([
+      queryInterface.bulkDelete('features', null, {}),
+      queryInterface.bulkDelete('users', null, {}),
+    ]);
   },
 };
