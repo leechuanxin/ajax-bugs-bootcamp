@@ -1,3 +1,5 @@
+const util = require('../util.js');
+
 module.exports = {
   up: async (queryInterface) => {
     /**
@@ -35,19 +37,31 @@ module.exports = {
     const users = [
       {
         email: 'chuanxin.lee@gmail.com',
-        password: 'chuanxin123',
+        password: util.getHash('chuanxin123'),
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        email: 'john_doe@gmail.com',
+        password: util.getHash('testuser123'),
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        email: 'susan_chan@gmail.com',
+        password: util.getHash('testuser123'),
         created_at: new Date(),
         updated_at: new Date(),
       },
     ];
 
     // Bulk insert categories
-    const [navbarFeature] = await queryInterface.bulkInsert('features',
+    const [navbarFeature, sidebarFeature, menuFeature] = await queryInterface.bulkInsert('features',
       features, {
         returning: true,
       });
 
-    const [chuanxin] = await queryInterface.bulkInsert(
+    const [chuanxin, johnDoe, susanChan] = await queryInterface.bulkInsert(
       'users',
       users,
       { returning: true },
@@ -60,6 +74,24 @@ module.exports = {
         commit: 'a6b316fe123',
         feature_id: navbarFeature.id,
         user_id: chuanxin.id,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        problem: 'I hate the animations on the sidebar.',
+        error_text: 'No particular error message',
+        commit: '213fe4148ac3',
+        feature_id: sidebarFeature.id,
+        user_id: johnDoe.id,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        problem: 'The menu crashes while navigating.',
+        error_text: 'SyntaxError: Unexpected token \'}\'',
+        commit: 'fff123fff',
+        feature_id: menuFeature.id,
+        user_id: susanChan.id,
         created_at: new Date(),
         updated_at: new Date(),
       },

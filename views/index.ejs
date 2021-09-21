@@ -18,8 +18,36 @@
   <body>
     <div class="container mt-3">
       <div class="row">
+        <div class="col-12" id="loginForm">
+          <div class="form-group">
+            <label for="emailInput">Email address</label>
+            <input
+              type="email"
+              class="form-control"
+              id="emailInput"
+              name="email"
+              aria-describedby="emailHelp"
+              placeholder="Enter email"
+            />
+          </div>
+          <div class="form-group">
+            <label for="passwordInput">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              name="password"
+              id="passwordInput"
+              placeholder="Password"
+            />
+          </div>
+          <button id="loginSignupButton" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-3">
+      <div class="row">
         <div class="mb-3 d-flex justify-content-center">
-          <button id="bugButton" class="btn btn-danger">
+          <button id="bugButton" class="btn btn-danger hidden">
             Create a Bugform
           </button>
         </div>
